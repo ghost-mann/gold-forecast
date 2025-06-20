@@ -1,6 +1,9 @@
 import pandas as pd
 from prophet import Prophet
+from prophet.diagnostics import cross_validation, performance_metrics
+from prophet.plot import plot_plotly, plot_components_plotly
 import matplotlib.pyplot as plt
+from pandas.tseries.holiday import USFederalHolidayCalendar
 
 # read and print df containing csv
 df = pd.read_csv("data.csv")
@@ -13,6 +16,11 @@ df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
 
 # rename colums
 df = df.rename(columns={'Date':'ds','Price':'y'})
+
+# define holidays
+calendar = USFederalHolidayCalendar()
+holidays = calendar.holidays(start=df['ds'].min(), end=df['ds'].max())
+holiday_df = pd.DataFrame({'holiday': 'us_holiday', 'ds':pd.to_datetime(holidays)})
 
 # initialize prophet model
 
