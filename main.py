@@ -24,7 +24,15 @@ holiday_df = pd.DataFrame({'holiday': 'us_holiday', 'ds':pd.to_datetime(holidays
 
 # initialize prophet model
 
-model = Prophet(daily_seasonality=True)
+model = Prophet(
+    daily_seasonality=False,
+    yearly_seasonality=True,
+    weekly_seasonality=True,
+    holidays=holiday_df,
+    changepoint_range=0.9,
+    changepoint_prior_scale=0.05
+)
+
 model.fit(df)
 
 # future predictions
@@ -37,3 +45,4 @@ forecast = model.predict(future)
 model.plot(forecast)
 plt.title("XAUUSD Price Forecast")
 plt.show()
+
